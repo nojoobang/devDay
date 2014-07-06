@@ -17,7 +17,10 @@ var Server = function() {
 var _ = Server.prototype;
 
 _._initialize = function() {
+	this._setDirectory();
+	this._setMiddleware();
 	this._setSocket();
+	this._setRouter();
 };
 
 _._setSocket = function() {
@@ -26,9 +29,6 @@ _._setSocket = function() {
 	this.io = socketio.listen(http.createServer(app).listen(80));
 
 	this.io.sockets.on('connection', function(socket) {
-		that._setDirectory();
-	that._setMiddleware();
-	that._setRouter();
 		that.socketEvent = function(fName, data) {
 			switch (fName) {
 				case 'join':
@@ -39,13 +39,11 @@ _._setSocket = function() {
 					break;
 			}
 		};
-	});
-
-	
+	});	
 }
 
 _._setDirectory = function() {
-	app.use('/', express.static(path.join(__dirname, '/')));
+	app.use('/assets', express.static(path.join(__dirname, '/assets')));
 };
 
 _._setMiddleware = function() {
@@ -62,9 +60,9 @@ _._setRouter = function() {
 		if(!that.users.hasOwnProperty(params.name)) {
 			that.users[params.name] = {
 				id: id
-			}
+			};
 			that.socketEvent('join', {id: id, name: params.name});
-		
+			
 			res.send({
 				id: id
 			});
@@ -75,7 +73,6 @@ _._setRouter = function() {
 	});
 
 	app.post('/button', function(req, res) {
-		console.log(req.body.direction);
 		that.socketEvent('direction', req.body);
 		res.send({
 			result: req.body.direction
@@ -83,7 +80,7 @@ _._setRouter = function() {
 	});
 
 	app.get('/', function(req, res){
-		fs.readFile('./game.html', 'utf8', function (err, data) {
+		fs.readFile('./assets/game.html', 'utf8', function (err, data) {
 			if (err) throw err;
 			res.write(data);
 			res.end();
