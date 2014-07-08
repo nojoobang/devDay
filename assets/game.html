@@ -3,20 +3,19 @@
 <head>
 	<meta charset="UTF-8">
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript" src="http://192.168.0.18/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="http://192.168.0.217/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="./assets/game.js"></script>
    
     <link rel="stylesheet" type="text/css" href="./assets/game.css">
 </head>
 <body>
 	<h1>상목이</h1>
-	<button class="join">test</button>
-	<button class="left">left</button>
-	<button class="right">right</button>
+	<p class="desc">KnowRe에 상주하시는 상목쌤과 마주쳐 상목쌤을 회사 밖으로 이끌어내자!<br /><br />1. 게이머가 접속하지 않으면 게임이 시작되지 않음.<br />2. 게이머가 접속해 있을경우 타이머가 0이 되는순간 게임 시작.<br />3. 상목쌤과 마주쳐 회사 밖으로 나가 경우 +10.<br />4. 상목쌤은 30%확률로 대표님으로 변함.<br />5. 대표님이 찾아오시는 경우 2초간 멈춤.</p>
 	<div class="timer"></div>
-	<div class="comment"></div>
-	<div class="field">
-	</div>
+	<div class="commentCeo"></div>
+	<div class="commentUser"></div>
+	<div class="field"></div>
+	<ul class="userList"></ul>
 	<script type="text/javascript">
     	$(document).ready(function() {
     		var game = new Game();

@@ -1,9 +1,44 @@
+h1 {
+	font-size: 70px;
+}
+
 .field {
 	position: relative;
 
 	width: 1000px;
 	height: 600px;
 	border: 1px solid black;
+}
+
+.desc {
+	font-size: 35px;
+
+	position: absolute;
+	top: 100px;
+	left: 1100px;
+}
+
+.userList {
+	position: absolute;
+	top: 500px;
+	left: 1100px;
+
+	margin: 0;
+	padding: 0;
+
+	list-style: none;
+}
+
+.userList li.list {
+	font-size: 30px;
+}
+
+.userList li.list .name {
+	
+}
+
+.userList li.list .point {
+	font-size: 30px;
 }
 
 .user {
@@ -21,10 +56,6 @@
 
 
 	border-radius: 20px;
-}
-
-.user.stop {
-	
 }
 
 .mok {
@@ -45,5 +76,25 @@
 }
 
 .timer {
+	height: 20px;
 	font-size: 20px;
+}
+
+
+.commentUser {
+	position: absolute;
+	top: 805px;
+	left: 0;
+	width: 100%;
+	height: 60px;
+	font-size: 60px;
+}
+
+.commentCeo {
+	position: absolute;
+	top: 137px;
+	left: 38px;
+	width: 100%;
+	height: 60px;
+	font-size: 60px;
 }

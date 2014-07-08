@@ -2,7 +2,7 @@ var Game = function() {
 	this.users = {};
 	this.timer = null;
 	this.doing = null;
-	this.defaultTime = 3;
+	this.defaultTime = 10;
 	this.moks = [];
 	this.isDone = false;
 
@@ -19,7 +19,7 @@ _._initialize = function() {
 };
 
 _._setSocket = function() {
-	this.socket = io.connect('http://192.168.0.18');
+	this.socket = io.connect('http://192.168.0.217');
 };
 
 _._setSocketEvent = function() {
@@ -37,24 +37,24 @@ _._setSocketEvent = function() {
 _._bindEvent = function() {
 	var that = this,
 		id = null;
-	$('.join').click(function() {
-		$.post('/join', {name : Math.floor(Math.random() * 100000000)}, function(data) {
-			id = data.id
-		});
-	});
+	// $('.join').click(function() {
+	// 	$.post('/join', {name : Math.floor(Math.random() * 100000000)}, function(data) {
+	// 		id = data.id
+	// 	});
+	// });
 
-	$('.left').click(function() {
-		$.post('/button', {direction : 'left', id: (id)? id : 1112}, function(data) {
-			//console.log(data);
-		})
-	});
+	// $('.left').click(function() {
+	// 	$.post('/button', {direction : 'left', id: (id)? id : 1112}, function(data) {
+	// 		//console.log(data);
+	// 	})
+	// });
 
-	$('.right').click(function() {
-		$.post('/button', {direction : 'right', id: (id)? id : 1111}, function(data) {
-			//console.log(data);
-		});
-	});
-	$('.join').trigger('click');
+	// $('.right').click(function() {
+	// 	$.post('/button', {direction : 'right', id: (id)? id : 1111}, function(data) {
+	// 		//console.log(data);
+	// 	});
+	// });
+	// $('.join').trigger('click');
 };
 
 _._startTimer = function() {
@@ -75,7 +75,7 @@ _._setTime = function() {
 		cnt++;
 	}
 	
-	if(this.defaultTime === 0) {
+	if(this.defaultTime === 0 && cnt > 0) {
 		this._startGame();
 	} else if(this.defaultTime === 0 && cnt === 0) {
 		this.defaultTime = 10;
@@ -142,6 +142,7 @@ _.checkCrash = function() {
 					} else {
 						this._gameComment('mok');
 						this.users[i].point += 10;
+						this.users[i].countPt();
 						this.moks[j].dom.remove();
 						this.moks.splice(j, 1);
 						j--;
@@ -174,30 +175,30 @@ _._gameComment = function(mode) {
 				comment = "상목쌤 일어나세요";
 				break;
 			case 5:
-				comment = "상목쌤 같이 퇴근해";
+				comment = "상목쌤 같이 퇴근해요";
 				break;
 		}
+		$('.commentUser').text(comment);
 	} else {
 		switch (num) {
 			case 1:
 				comment = "영기씨 이거 고쳐주세요.";
 				break;
 			case 2:
-				comment = "승건쌤?";
+				comment = "승건쌤, 그~";
 				break;
 			case 3:
-				comment = "경호씨 이거 고쳐주세요";
+				comment = "경호씨 이거~ 잘 안되는데..";
 				break;
 			case 4:
-				comment = "조승연씨가 해주겠죠 뭐 허허";
+				comment = "조승연씨가 해주겠죠 뭐 ㅎㅎ";
 				break;
 			case 5:
 				comment = "재원씨 스크롤이 이상해요";
 				break;
 		}
+		$('.commentCeo').text(comment);
 	}
-
-	$('.comment').text(comment);
 };
 
 _._gameOver = function() {
@@ -212,6 +213,7 @@ var User = function(id, name, game) {
 	this.isStop = false;
 	this.fPosition = Math.floor(Math.random() * 9);
 	this.dom = $('<div id="'+ this.id +'" class="user" />');
+	this.list = $('<li class="list" id="'+this.name+'" />');
 	this.position = {
 		'top': 0,
 		'left': 0
@@ -223,8 +225,24 @@ var User = function(id, name, game) {
 var _ = User.prototype;
 
 _._initialize = function() {
+	this._creatList();
 	this._setFirstLocation();
 };
+
+_._creatList = function() {
+	var name = $('<span class="name" />'),
+		point = $('<span class="point" />');
+		
+	$('.userList').append(this.list);
+
+	name.text(this.name+ ": ");
+	this.list.append(name);
+	this.list.append(point);
+};
+
+_.countPt = function() {
+	$('li#' + this.name).find('.point').text(this.point);	
+};	
 
 _._setFirstLocation = function () {
 	this.position.left = this.fPosition * 100;
@@ -236,7 +254,6 @@ _._setFirstLocation = function () {
 };
 
 _.setPosition = function(id, d) {
-	console.log(d, this.isStop);
 	if(!this.isStop) {
 		var direction = (d === 'right')? 100 : -100,
 			prevPosition = parseInt($('#'+this.id).css('left'));
@@ -262,7 +279,7 @@ _.stop = function(left) {
 
 	setTimeout(function() {
 		that.isStop = false;
-	}, 1000);
+	}, 2000);
 };
 
 
@@ -322,7 +339,7 @@ _._checkPosition = function() {
 	} else {
 		if(this.currPosition === 440) {
 			var extra = Math.floor(Math.random() * 10);
-			if(extra <= 5) {
+			if(extra <= 3) {
 				this.dom.addClass('ceo');
 			}
 		}
